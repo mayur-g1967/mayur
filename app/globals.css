@@ -1,0 +1,797 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-syne: "Syne", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-dm: "DM Sans", sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  /* ========================================
+     PERSONAAI THEME
+     Palette: #242038 - #9067C6 - #8D86C9 - #CAC4CE - #F7ECE1
+     ======================================== */
+
+  /* Background & Surface Colors */
+  --background: oklch(0.977 0.005 60);
+  /* #F7ECE1 - Cream background */
+  --foreground: oklch(0.225 0.028 285);
+  /* #242038 - Deep purple text */
+
+  --card: oklch(1 0 0);
+  /* White cards */
+  --card-foreground: oklch(0.225 0.028 285);
+  /* #242038 - Card text */
+
+  --popover: oklch(1 0 0);
+  /* White popovers */
+  --popover-foreground: oklch(0.225 0.028 285);
+  /* #242038 - Popover text */
+
+  /* Primary Colors - Vibrant Purple (#9067C6) */
+  --primary: oklch(0.565 0.145 285);
+  /* #9067C6 - Main accent */
+  --primary-foreground: oklch(1 0 0);
+  /* White text on purple */
+
+  /* Secondary Colors - Soft Indigo (#8D86C9) */
+  --secondary: oklch(0.595 0.085 285);
+  /* #8D86C9 - Soft accent */
+  --secondary-foreground: oklch(1 0 0);
+  /* White text on indigo */
+
+  /* Muted Colors - Light Grey (#CAC4CE) */
+  --muted: oklch(0.82 0.012 285);
+  /* #CAC4CE - Muted background */
+  --muted-foreground: oklch(0.225 0.028 285);
+  /* #242038 - Muted text */
+
+  /* Accent Colors - Using primary purple */
+  --accent: oklch(0.565 0.145 285);
+  /* #9067C6 - Accent */
+  --accent-foreground: oklch(1 0 0);
+  /* White text */
+
+  /* Utility Colors */
+  --destructive: oklch(0.577 0.245 27.325);
+  /* Red for errors */
+  --destructive-foreground: oklch(1 0 0);
+  /* White text */
+
+  --border: oklch(0.82 0.012 285);
+  /* #CAC4CE - Borders */
+  --input: oklch(0.922 0.008 285);
+  /* Light input background */
+  --ring: oklch(0.565 0.145 285);
+  /* #9067C6 - Focus rings */
+
+  /* Chart Colors - PersonaAI themed */
+  --chart-1: oklch(0.565 0.145 285);
+  /* #9067C6 - Primary purple */
+  --chart-2: oklch(0.595 0.085 285);
+  /* #8D86C9 - Soft indigo */
+  --chart-3: oklch(0.225 0.028 285);
+  /* #242038 - Deep purple */
+  --chart-4: oklch(0.82 0.012 285);
+  /* #CAC4CE - Light grey */
+  --chart-5: oklch(0.977 0.005 60);
+  /* #F7ECE1 - Cream */
+
+  /* SIDEBAR - PersonaAI Style (Light sidebar in light mode) */
+  --sidebar: oklch(0.977 0.005 60);
+  /* #F7ECE1 - Cream */
+  --sidebar-foreground: oklch(0.225 0.028 285);
+  /* #242038 - Dark purple */
+  --sidebar-primary: oklch(0.565 0.145 285);
+  /* #9067C6 - Active item */
+  --sidebar-primary-foreground: oklch(1 0 0);
+  /* White text */
+  --sidebar-accent: oklch(0.9 0.02 285);
+  /* Lighter lavender for hover */
+  --sidebar-accent-foreground: oklch(0.225 0.028 285);
+  /* Dark purple text */
+  --sidebar-border: oklch(0.82 0.012 285);
+  /* #CAC4CE - Border */
+  --sidebar-ring: oklch(0.565 0.145 285);
+  /* #9067C6 - Focus ring */
+
+  /* ScrollBar Colour */
+  --scrollbar-colour: oklch(0.82 0.012 285);
+  /* visible but subtle */
+  --scrollbar-hover: oklch(0.565 0.145 285);
+  /* purple hover */
+}
+
+.dark {
+  /* ========================================
+     DARK MODE - Inverted PersonaAI Theme
+     ======================================== */
+
+  /* Background & Surface Colors */
+  --background: oklch(0.225 0.028 285);
+  /* #242038 - Deep purple background */
+  --foreground: oklch(0.977 0.005 60);
+  /* #F7ECE1 - Cream text */
+
+  --card: oklch(0.28 0.028 285);
+  /* Slightly lighter purple cards */
+  --card-foreground: oklch(0.977 0.005 60);
+  /* #F7ECE1 - Card text */
+
+  --popover: oklch(0.28 0.028 285);
+  /* Dark purple popovers */
+  --popover-foreground: oklch(0.977 0.005 60);
+  /* Cream text */
+
+  /* Primary Colors - Brighter in dark mode */
+  --primary: oklch(0.665 0.165 285);
+  /* Brighter #9067C6 */
+  --primary-foreground: oklch(1 0 0);
+  /* White text */
+
+  /* Secondary Colors */
+  --secondary: oklch(0.395 0.045 285);
+  /* Darker indigo */
+  --secondary-foreground: oklch(0.977 0.005 60);
+  /* Cream text */
+
+  /* Muted Colors */
+  --muted: oklch(0.395 0.028 285);
+  /* Dark muted */
+  --muted-foreground: oklch(0.82 0.012 285);
+  /* #CAC4CE - Muted text */
+
+  /* Accent Colors */
+  --accent: oklch(0.595 0.085 285);
+  /* #8D86C9 - Accent */
+  --accent-foreground: oklch(1 0 0);
+  /* White text */
+
+  /* Utility Colors */
+  --destructive: oklch(0.704 0.191 22.216);
+  /* Lighter red for dark mode */
+  --destructive-foreground: oklch(1 0 0);
+  /* White text */
+
+  --border: oklch(1 0 0 / 10%);
+  /* Semi-transparent white border */
+  --input: oklch(1 0 0 / 15%);
+  /* Semi-transparent input */
+  --ring: oklch(0.665 0.165 285);
+  /* Bright purple focus ring */
+
+  /* Chart Colors - Adjusted for dark mode */
+  --chart-1: oklch(0.665 0.165 285);
+  /* Bright purple */
+  --chart-2: oklch(0.695 0.125 285);
+  /* Bright indigo */
+  --chart-3: oklch(0.82 0.012 285);
+  /* Light grey */
+  --chart-4: oklch(0.595 0.085 285);
+  /* Soft indigo */
+  --chart-5: oklch(0.977 0.005 60);
+  /* Cream accent */
+
+  /* SIDEBAR - Dark mode */
+  --sidebar: oklch(0.18 0.028 285);
+  /* Even darker purple */
+  --sidebar-foreground: oklch(0.977 0.005 60);
+  /* Cream text */
+  --sidebar-primary: oklch(0.665 0.165 285);
+  /* Bright purple active */
+  --sidebar-primary-foreground: oklch(1 0 0);
+  /* White text */
+  --sidebar-accent: oklch(0.395 0.045 285);
+  /* Darker hover */
+  --sidebar-accent-foreground: oklch(0.977 0.005 60);
+  /* Cream text */
+  --sidebar-border: oklch(1 0 0 / 10%);
+  /* Subtle border */
+  --sidebar-ring: oklch(0.665 0.165 285);
+  /* Bright focus ring */
+
+  /* ScrollBar Colour */
+  --scrollbar-colour: oklch(0.665 0.165 285);
+  /* #CAC4CE */
+  --scrollbar-hover: oklch(0.28 0.028 285 1);
+  /* #8D86C9 */
+
+  /* InQuizzo Argon Color System */
+  --iq-void: 260 100% 6%;
+  --iq-deep: 262 96% 8%;
+  --iq-surface: 258 78% 11%;
+  --iq-border: 275 97% 38%;
+  --iq-purple: 275 97% 38%;
+  --iq-pink: 318 84% 57%;
+  --iq-mist: 316 90% 97%;
+  --iq-text: 270 42% 92%;
+  --iq-muted: 270 20% 51%;
+
+  --font-syne: 'Syne', sans-serif;
+  --font-dm: 'DM Sans', sans-serif;
+}
+
+@layer utilities {
+
+  /* InQuizzo gradients */
+  .iq-grad-brand {
+    background: linear-gradient(135deg, hsl(var(--iq-purple)), hsl(var(--iq-pink)));
+  }
+
+  .iq-grad-argon {
+    background: linear-gradient(135deg, hsl(var(--iq-void)), hsl(var(--iq-purple)), hsl(var(--iq-pink)), hsl(var(--iq-mist)));
+  }
+
+  .iq-grad-surface {
+    background: linear-gradient(135deg, hsl(var(--iq-purple) / 0.12), hsl(var(--iq-pink) / 0.06), transparent);
+  }
+
+  .iq-grad-text {
+    background: linear-gradient(135deg, hsl(var(--iq-pink)), hsl(var(--iq-mist)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .iq-grad-subtle {
+    background: linear-gradient(180deg, hsl(var(--iq-purple) / 0.08) 0%, transparent 100%);
+  }
+
+  .iq-text-glow {
+    text-shadow: 0 0 40px hsl(var(--iq-pink) / 0.5), 0 0 80px hsl(var(--iq-purple) / 0.3);
+  }
+
+  /* InQuizzo — Glassmorphism & Design Utilities */
+  .iq-glass {
+    background: rgba(106, 74, 155, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(106, 74, 155, 0.15);
+  }
+
+  .iq-glass-dark {
+    background: rgba(10, 8, 13, 0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(106, 74, 155, 0.2);
+  }
+
+  .iq-mesh-bg {
+    background-color: #0a080d;
+    background-image:
+      radial-gradient(at 0% 0%, rgba(106, 74, 155, 0.2) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(200, 78, 138, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(42, 90, 171, 0.2) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(106, 74, 155, 0.15) 0px, transparent 50%);
+  }
+
+  .iq-gradient-text {
+    background: linear-gradient(135deg, #6A4A9B 0%, #C84E8A 50%, #2A5AAB 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .iq-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .iq-card-hover:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border-color: rgba(106, 74, 155, 0.4);
+  }
+
+  .iq-primary-gradient {
+    background: linear-gradient(135deg, #6A4A9B 0%, #C84E8A 100%);
+  }
+
+  .iq-accent-gradient {
+    background: linear-gradient(135deg, #2A5AAB 0%, #6A4A9B 100%);
+  }
+
+  /* Glass card – quiz panels */
+  .glass-card {
+    background: linear-gradient(135deg, rgba(13, 5, 51, 0.8), rgba(144, 103, 198, 0.05));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(144, 103, 198, 0.2);
+  }
+
+  /* Ripple rings – voice beacon */
+  @keyframes ripple {
+    0% {
+      transform: scale(0.8);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(2.5);
+      opacity: 0;
+    }
+  }
+
+  .ripple-effect {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(244, 114, 182, 0.3);
+    animation: ripple 2s infinite;
+  }
+
+  .ripple-2 {
+    animation-delay: 0.5s;
+  }
+
+  .ripple-3 {
+    animation-delay: 1s;
+  }
+
+  /* Ticker animation */
+  @keyframes ticker-scroll {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-ticker {
+    animation: ticker-scroll 20s linear infinite;
+  }
+
+  /* Shimmer sweep */
+  @keyframes shimmer-sweep {
+    0% {
+      transform: translateX(-100%) skewX(-15deg);
+    }
+
+    100% {
+      transform: translateX(200%) skewX(-15deg);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer-sweep 3s ease-in-out infinite;
+  }
+
+  /* Pulse glow */
+  @keyframes pulse-glow {
+
+    0%,
+    100% {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+
+  /* Orbit drift for mesh orbs */
+  @keyframes orbit-drift-1 {
+
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+
+    25% {
+      transform: translate(50px, -30px) scale(1.1);
+    }
+
+    50% {
+      transform: translate(-20px, 40px) scale(0.95);
+    }
+
+    75% {
+      transform: translate(30px, 20px) scale(1.05);
+    }
+  }
+
+  @keyframes orbit-drift-2 {
+
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+
+    25% {
+      transform: translate(-40px, 20px) scale(1.05);
+    }
+
+    50% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+
+    75% {
+      transform: translate(-20px, -10px) scale(0.95);
+    }
+  }
+
+  @keyframes orbit-drift-3 {
+
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+      transform: translate(60px, 30px) scale(1.08);
+    }
+
+    66% {
+      transform: translate(-30px, -40px) scale(0.92);
+    }
+  }
+
+  .animate-orbit-1 {
+    animation: orbit-drift-1 15s ease-in-out infinite;
+  }
+
+  .animate-orbit-2 {
+    animation: orbit-drift-2 18s ease-in-out infinite;
+  }
+
+  .animate-orbit-3 {
+    animation: orbit-drift-3 20s ease-in-out infinite;
+  }
+
+  /* Scroll bounce */
+  @keyframes scroll-bounce {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(8px);
+    }
+  }
+
+  .animate-scroll-bounce {
+    animation: scroll-bounce 2s ease-in-out infinite;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .font-dm {
+    font-family: var(--font-dm);
+  }
+
+  .font-syne {
+    font-family: var(--font-syne);
+  }
+}
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body.custom-cursor-active * {
+    cursor: none !important;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ========================================
+   RADIX UI SCROLL LOCK FIX
+   Prevents Radix portals (Select, DropdownMenu) from
+   injecting padding-right onto <body>, which shifts
+   sticky/fixed headers horizontally.
+   ======================================== */
+body[data-scroll-locked] {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* ========================================
+   NOTIFICATION DROPDOWN — MOBILE POSITIONING
+   Appears just below the sticky header (5rem = h-20)
+   and centered horizontally. Desktop is untouched.
+   ======================================== */
+@media (max-width: 640px) {
+  [data-radix-popper-content-wrapper]:has(.notification-dropdown) {
+    position: fixed !important;
+    top: 5rem !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100vw - 2rem) !important;
+  }
+}
+
+
+/* ========================================
+   PERSONAAI CUSTOM UTILITY CLASSES
+   ======================================== */
+
+@layer utilities {
+
+  /* PersonaAI Color Classes */
+  .bg-persona-dark {
+    background-color: oklch(0.225 0.028 285);
+    /* #242038 */
+  }
+
+  .bg-persona-purple {
+    background-color: oklch(0.565 0.145 285);
+    /* #9067C6 */
+  }
+
+  .bg-persona-indigo {
+    background-color: oklch(0.595 0.085 285);
+    /* #8D86C9 */
+  }
+
+  .bg-persona-grey {
+    background-color: oklch(0.82 0.012 285);
+    /* #CAC4CE */
+  }
+
+  .bg-persona-cream {
+    background-color: oklch(0.977 0.005 60);
+    /* #F7ECE1 */
+  }
+
+  /* Text Colors */
+  .text-persona-dark {
+    color: oklch(0.225 0.028 285);
+    /* #242038 */
+  }
+
+  .text-persona-purple {
+    color: oklch(0.565 0.145 285);
+    /* #9067C6 */
+  }
+
+  .text-persona-indigo {
+    color: oklch(0.595 0.085 285);
+    /* #8D86C9 */
+  }
+
+  .text-persona-grey {
+    color: oklch(0.82 0.012 285);
+    /* #CAC4CE */
+  }
+
+  .text-persona-cream {
+    color: oklch(0.977 0.005 60);
+    /* #F7ECE1 */
+  }
+
+  /* Border Colors */
+  .border-persona-purple {
+    border-color: oklch(0.565 0.145 285);
+    /* #9067C6 */
+  }
+
+  .border-persona-grey {
+    border-color: oklch(0.82 0.012 285);
+    /* #CAC4CE */
+  }
+
+  /* Gradient Classes */
+  .gradient-persona-primary {
+    background: linear-gradient(135deg,
+        oklch(0.565 0.145 285) 0%,
+        oklch(0.595 0.085 285) 100%);
+    /* #9067C6 to #8D86C9 */
+  }
+
+  .gradient-persona-reverse {
+    background: linear-gradient(135deg,
+        oklch(0.595 0.085 285) 0%,
+        oklch(0.565 0.145 285) 100%);
+    /* #8D86C9 to #9067C6 */
+  }
+
+  .gradient-persona-dark {
+    background: linear-gradient(135deg,
+        oklch(0.225 0.028 285) 0%,
+        oklch(0.565 0.145 285) 100%);
+    /* #242038 to #9067C6 */
+  }
+
+  .gradient-persona-light {
+    background: linear-gradient(135deg,
+        oklch(0.565 0.145 285) 0%,
+        oklch(0.225 0.028 285) 100%);
+    /* #9067C6 to #242038 */
+  }
+
+  /* Shadow Utilities */
+  .shadow-persona-purple {
+    box-shadow: 0 4px 12px oklch(0.565 0.145 285 / 0.25);
+  }
+
+  .shadow-persona-hover {
+    box-shadow: 0 8px 24px oklch(0.565 0.145 285 / 0.15);
+  }
+
+  /* Custom Effects */
+  .backdrop-persona {
+    backdrop-filter: blur(8px);
+    background-color: oklch(0.225 0.028 285 / 0.8);
+  }
+
+  /* Custom Scrollbar Styles */
+
+  /* Entire scrollbar */
+  ::-webkit-scrollbar {
+    background-color: transparent;
+    width: 0.5rem;
+    /* adjust as you like */
+  }
+
+  /* Scrollbar track */
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 1rem;
+  }
+
+  /* Scrollbar thumb (draggable) */
+  ::-webkit-scrollbar-thumb {
+    /* Using the theme-aware variable here */
+    background-color: var(--scrollbar-colour);
+    border-radius: 999px;
+    /* Note: 'color' property does not affect the scrollbar thumb appearance */
+    color: black;
+  }
+
+  /* Thumb hover */
+  ::-webkit-scrollbar-thumb:hover {
+    /* Using the theme-aware hover variable here */
+    background-color: var(--scrollbar-hover);
+  }
+
+  /* Add Firefox support for completeness */
+  * {
+    /* uses the same variables defined above */
+    scrollbar-color: var(--scrollbar-colour) transparent;
+    scrollbar-width: thin;
+  }
+
+  .custom-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-colour);
+    border-radius: 10px;
+  }
+
+  .custom-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-hover);
+  }
+
+  /* Firefox support */
+  .custom-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-colour) transparent;
+  }
+
+  /* Add to your globals.css */
+
+  /* Page transition animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInFromRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInFromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Apply to auth pages */
+  .auth-page-enter {
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  .auth-form-slide-right {
+    animation: slideInFromRight 0.5s ease-out;
+  }
+
+  .auth-form-slide-left {
+    animation: slideInFromLeft 0.5s ease-out;
+  }
+
+  /* Smooth transitions for all auth elements */
+  .auth-container * {
+    transition: all 0.3s ease-in-out;
+  }
+}

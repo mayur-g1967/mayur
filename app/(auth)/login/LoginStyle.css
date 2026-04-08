@@ -1,0 +1,157 @@
+/* Reset for Next.js defaults inside this container */
+.login_container * {
+    box-sizing: border-box;
+}
+
+.login_container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login_form_container {
+    width: 900px;
+    height: auto;
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+                0px 3px 4px 0px rgb(0 0 0 / 14%), 
+                0px 1px 8px 0px rgb(0 0 0 / 12%);
+    overflow: hidden;
+    background-color: white; /* Ensures visibility if container background fails */
+}
+
+.left {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 30px 20px;
+}
+
+.form_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form_container h1 {
+    font-size: 34px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333; /* Dark text for the title */
+}
+
+/* --- Input Fixes --- */
+.input {
+    outline: none;
+    border: 1px solid transparent; /* Added for smoother transition on focus */
+    width: 370px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #edf5f3;
+    margin: 8px 0;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    /* Force text color for Next.js visibility */
+    color: #000 !important; 
+}
+
+/* Placeholder specific fix */
+.input::placeholder {
+    color: #666 !important;
+    opacity: 1 !important; /* Required for Firefox */
+}
+
+.input:focus {
+    border: 1px solid #3bb19b;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(59, 177, 155, 0.2);
+}
+
+.error_msg {
+    width: 370px;
+    padding: 12px;
+    margin: 5px 0;
+    font-size: 14px;
+    background-color: #f34646;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* --- Right Side Fixes --- */
+.right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #3bb19b;
+    padding: 30px;
+}
+
+.right h1 {
+    margin-top: 0;
+    color: white;
+    font-size: 34px;
+    text-align: center;
+}
+
+/* --- Button Fixes --- */
+.white_btn,
+.green_btn {
+    border: none;
+    outline: none;
+    padding: 12px 0;
+    border-radius: 20px;
+    width: 180px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    text-align: center;
+}
+
+.white_btn {
+    background-color: white;
+    color: #3bb19b;
+    display: inline-block;
+    text-decoration: none; /* In case it's a Link tag */
+}
+
+.white_btn:hover {
+    background-color: #f3f3f3;
+}
+
+.green_btn {
+    background-color: #3bb19b;
+    color: white;
+    margin: 10px 0;
+}
+
+.green_btn:hover {
+    background-color: #319d89;
+}
+
+/* Responsive fix for smaller screens */
+@media (max-width: 950px) {
+    .login_form_container {
+        width: 95%;
+        flex-direction: column;
+    }
+    .left, .right {
+        width: 100%;
+        border-radius: 0;
+    }
+    .input {
+        width: 100%;
+        max-width: 370px;
+    }
+}

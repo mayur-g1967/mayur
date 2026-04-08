@@ -1,0 +1,4 @@
+{
+  "status": 400,
+  "response": "{\"statusCode\":400,\"timestamp\":\"2026-04-04T11:48:09.872Z\",\"path\":\"/v2/transcription\",\"message\":\"Failed to retrieve the audio file from Youtube\",\"request_id\":\"G-dc15ac8c\"}"
+}

@@ -1,0 +1,220 @@
+/* Sidebar Optimization */
+
+  /* =============================================================================
+   PERFORMANCE-OPTIMIZED SIDEBAR & LAYOUT
+   Add this to your globals.css or create a new performance.css file
+   ============================================================================= */
+
+/* 1. SIDEBAR PERFORMANCE OPTIMIZATION */
+/* Force GPU acceleration and prevent layout thrashing */
+aside[data-sidebar="sidebar"] {
+  /* Use fixed positioning to remove from document flow */
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 40;
+  
+  /* GPU-accelerated properties only */
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  
+  /* Isolate rendering context */
+  contain: layout style paint;
+  
+  /* Hardware acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Collapsed state - use transform instead of width */
+aside[data-sidebar="sidebar"][data-state="collapsed"] {
+  transform: translateX(calc(-100% + var(--sidebar-width-icon, 3rem)));
+}
+
+aside[data-sidebar="sidebar"][data-state="expanded"] {
+  transform: translateX(0);
+}
+
+/* 2. MAIN CONTENT AREA OPTIMIZATION */
+/* Prevent content reflow during sidebar animation */
+.dashboard-wrapper,
+main[data-main-content] {
+  /* Account for sidebar width with margin */
+  margin-left: var(--sidebar-width, 16rem);
+  transition: margin-left 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Isolate rendering */
+  contain: layout style;
+  min-width: 0; /* Prevent overflow issues */
+  
+  /* Hardware acceleration */
+  transform: translateZ(0);
+  will-change: margin-left;
+}
+
+/* Adjust content margin when sidebar is collapsed */
+[data-sidebar-state="collapsed"] .dashboard-wrapper,
+[data-sidebar-state="collapsed"] main[data-main-content] {
+  margin-left: var(--sidebar-width-icon, 3rem);
+}
+
+/* 3. PREVENT COMPONENT REFLOW DURING ANIMATION */
+/* Isolate expensive components */
+.metric-card,
+.activity-chart,
+.insights-card,
+[data-chart-container] {
+  contain: layout style paint;
+  will-change: auto; /* Let browser optimize */
+}
+
+/* Specifically optimize Recharts */
+.recharts-wrapper,
+.recharts-surface {
+  contain: strict;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.recharts-responsive-container {
+  /* Prevent Recharts from triggering reflows */
+  contain: size layout style paint;
+}
+
+/* 4. OPTIMIZE CARD GRIDS */
+/* Prevent grid recalculation during sidebar animation */
+.dashboard-grid,
+.metrics-grid,
+[data-dashboard-grid] {
+  display: grid;
+  contain: layout style;
+  
+  /* Use stable grid that doesn't recalculate */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+/* 5. REDUCE PAINT OPERATIONS */
+/* Prevent unnecessary repaints on static elements */
+.sidebar-header,
+.sidebar-footer,
+.sidebar-nav {
+  contain: layout paint;
+}
+
+/* 6. OPTIMIZE TRANSITIONS */
+/* Only transition GPU-accelerated properties */
+* {
+  /* Override any transition-all with specific properties */
+  transition-property: transform, opacity, background-color, color, border-color;
+}
+
+/* Remove transitions during sidebar toggle for elements that don't need them */
+[data-sidebar-transitioning="true"] .metric-card,
+[data-sidebar-transitioning="true"] .activity-chart,
+[data-sidebar-transitioning="true"] .insights-card {
+  transition: none !important;
+}
+
+/* 7. MOBILE OPTIMIZATION */
+@media (max-width: 768px) {
+  aside[data-sidebar="sidebar"] {
+    /* On mobile, sidebar overlays content */
+    transform: translateX(-100%);
+  }
+  
+  aside[data-sidebar="sidebar"][data-state="expanded"] {
+    transform: translateX(0);
+  }
+  
+  .dashboard-wrapper,
+  main[data-main-content] {
+    margin-left: 0 !important;
+  }
+  
+  /* Add backdrop when sidebar is open on mobile */
+  [data-sidebar-state="expanded"]::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 39;
+    animation: fadeIn 0.15s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 8. CSS VARIABLES FOR CONSISTENCY */
+:root {
+  --sidebar-width: 16rem;
+  --sidebar-width-icon: 3rem;
+  --sidebar-transition-duration: 0.15s;
+  --sidebar-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 9. FORCE COMPOSITING FOR SMOOTH ANIMATIONS */
+/* Create new stacking contexts to isolate layers */
+aside[data-sidebar="sidebar"],
+.dashboard-wrapper,
+.recharts-wrapper {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+}
+
+/* 10. PREVENT LAYOUT SHIFT */
+/* Ensure consistent sizing */
+.sidebar-content,
+.sidebar-menu {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Icons and text shouldn't cause reflow */
+.sidebar-menu-button {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* 11. OPTIMIZE AVATAR AND IMAGES */
+.sidebar-footer img,
+.sidebar-header img,
+[data-avatar] {
+  contain: strict;
+  will-change: auto;
+}
+
+/* 12. DISABLE SMOOTH SCROLLING DURING SIDEBAR ANIMATION */
+[data-sidebar-transitioning="true"] {
+  scroll-behavior: auto !important;
+}
+
+/* Re-enable after animation */
+[data-sidebar-transitioning="false"] {
+  scroll-behavior: smooth;
+}
+
+/* =============================================================================
+   PERFORMANCE MONITORING (Optional - Remove in Production)
+   ============================================================================= */
+/* 
+   Uncomment to visualize layout boundaries during development:
+   
+   * {
+     outline: 1px solid rgba(255, 0, 0, 0.1) !important;
+   }
+   
+   [data-sidebar] {
+     outline: 2px solid blue !important;
+   }
+   
+   .dashboard-wrapper {
+     outline: 2px solid green !important;
+   }
+*/
