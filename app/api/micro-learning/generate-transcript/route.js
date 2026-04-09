@@ -2,10 +2,10 @@
 // For App Router (Next.js 13+)
 
 import { NextResponse } from "next/server";
-import { fetchTranscript } from "youtube-transcript-plus"; // ← CHANGED: updated import style
-import { YtdlCore, toPipeableStream } from "@ybd-project/ytdl-core/serverless"; // ← NEW: serverless-optimized, works on Vercel
+import { getSubtitles } from "youtube-caption-extractor"; // ← CHANGED: replaced youtube-transcript-plus
+import { YtdlCore, toPipeableStream } from "@ybd-project/ytdl-core/serverless"; // ← serverless-optimized, works on Vercel
 
-export const maxDuration = 60; // ← NEW: Extend Vercel function timeout to 60s
+export const maxDuration = 60; // ← Extend Vercel function timeout to 60s
 
 export async function POST(req) {
   try {
@@ -19,7 +19,7 @@ export async function POST(req) {
       );
     }
 
-    // ← CHANGED: removed videoUrl variable (no longer passed to Gladia directly)
+    // ← removed videoUrl variable (no longer passed to Gladia directly)
     const gladiaKey = process.env.GLADIA_API_KEY;
 
     if (!gladiaKey) {
@@ -38,7 +38,7 @@ export async function POST(req) {
     //    (Server-side safety net — primary attempt is client-side in VideoPlayerPage)
     // ────────────────────────────────────────────────
     try {
-      const transcriptData = await fetchTranscript(videoId); // ← CHANGED: updated to new import style
+      const transcriptData = await getSubtitles({ videoID: videoId, lang: 'en' }); // ← CHANGED: youtube-caption-extractor, zero Node.js deps, Vercel-compatible
       if (transcriptData && transcriptData.length > 0) {
         let transcript = transcriptData.map((t) => t.text).join(" ");
 
@@ -77,7 +77,7 @@ export async function POST(req) {
     console.log(`[Transcript] Falling back to Gladia V2 for video: ${videoId}`);
 
     try {
-      // ── CHANGED Step A: Download audio buffer via @ybd-project/ytdl-core/serverless ──
+      // ── Step A: Download audio buffer via @ybd-project/ytdl-core/serverless ──
       console.log(`[Transcript] Downloading audio buffer for ${videoId}...`);
       const ytdl = new YtdlCore({ streamType: "nodejs" });
       const audioStream = await ytdl.download(
@@ -94,7 +94,7 @@ export async function POST(req) {
         `[Transcript] Audio buffer ready (${audioBuffer.length} bytes)`,
       );
 
-      // ── CHANGED Step B: Upload audio buffer to Gladia (not YouTube URL) ──
+      // ── Step B: Upload audio buffer to Gladia (not YouTube URL) ──
       const formData = new FormData();
       formData.append(
         "audio",
@@ -118,7 +118,7 @@ export async function POST(req) {
       const { audio_url } = await uploadResponse.json();
       console.log(`[Transcript] Audio uploaded to Gladia. URL: ${audio_url}`);
 
-      // ── Step C: Initiate transcription (same as before, but audio_url is now Gladia-hosted) ──
+      // ── Step C: Initiate transcription (audio_url is now Gladia-hosted) ──
       const initiateResponse = await fetch(
         "https://api.gladia.io/v2/transcription",
         {
