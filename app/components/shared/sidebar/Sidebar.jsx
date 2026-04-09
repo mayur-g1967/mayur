@@ -59,6 +59,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import SettingsModal from "./SettingsModal";
 import ProfileModal from "./ProfileModal";
+import HelpFeedbackModal from "./HelpFeedbackModal";
 
 export default function AppSidebar() {
   const pathname = usePathname();
@@ -75,6 +76,7 @@ export default function AppSidebar() {
 
   // Profile modal states
   const [openProfileModal, setOpenProfileModal] = useState(false);
+  const [openHelpModal, setOpenHelpModal] = useState(false);
 
   // ✅ ADD USER STATE
   const [user, setUser] = useState({
@@ -132,10 +134,10 @@ export default function AppSidebar() {
     // Show success message
     toast.success('Logged out successfully');
 
-    // Instant redirect
+    // Instant hard redirect
     setIsLoggingOut(false);
     setOpenLogoutDialog(false);
-    router.push('/');
+    window.location.href = '/';
   }
 
   if (!mounted) return null;
@@ -212,7 +214,8 @@ export default function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
               {sidebarItems.map((item) => {
-                const isActive = pathname === item.href;
+                // Match exact route, OR if it's a nested route under a module (skip this for the root /dashboard)
+                const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname?.startsWith(`${item.href}/`));
                 return (
                   <SidebarMenuItem
                     key={item.href}
@@ -341,7 +344,10 @@ export default function AppSidebar() {
                         <Settings className="size-4" /> Settings
                       </DropdownMenuItem>
 
-                      <DropdownMenuItem className="text-foreground dark:text-persona-cream/80 hover:bg-primary/10 dark:hover:bg-white/10 cursor-pointer focus:bg-primary/10 dark:focus:bg-white/10 transition-colors">
+                      <DropdownMenuItem
+                        onClick={() => setOpenHelpModal(true)}
+                        className="text-foreground dark:text-persona-cream/80 hover:bg-primary/10 dark:hover:bg-white/10 cursor-pointer focus:bg-primary/10 dark:focus:bg-white/10 transition-colors"
+                      >
                         <MessageCircleQuestionMark className="size-4" />
                         Help & Support
                       </DropdownMenuItem>
@@ -410,6 +416,9 @@ export default function AppSidebar() {
 
       {/* ─── SETTINGS MODAL ─── */}
       <SettingsModal isOpen={openSettingsModal} onClose={() => setOpenSettingsModal(false)} />
+
+      {/* ─── HELP MODAL ─── */}
+      <HelpFeedbackModal isOpen={openHelpModal} onClose={() => setOpenHelpModal(false)} />
 
     </Sidebar>
   );

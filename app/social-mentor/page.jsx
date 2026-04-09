@@ -238,7 +238,7 @@ export default function SocialMentorPage() {
 
                 {/* Left Panel: Chat Interface */}
                 <section
-                    className="w-full lg:w-[68%] lg:min-w-[68%] lg:max-w-[68%] flex-shrink-0 flex flex-col rounded-[24px] border shadow-2xl overflow-hidden order-2 lg:order-1 h-[60%] lg:h-full backdrop-blur-2xl transition-all duration-300"
+                    className="w-full lg:w-[68%] lg:max-w-[68%] flex-shrink-0 flex flex-col rounded-[24px] border shadow-2xl overflow-hidden order-2 lg:order-1 h-[60%] lg:h-full backdrop-blur-2xl transition-all duration-300 min-w-0"
                     style={{ backgroundColor: t.glassBg, borderColor: t.glassBorder }}
                 >
                     <ChatInterface
@@ -253,7 +253,7 @@ export default function SocialMentorPage() {
 
                 {/* Right Panel: 3D Avatar Space or History */}
                 <section
-                    className="w-full lg:w-[32%] lg:min-w-[32%] lg:max-w-[32%] flex-shrink-0 rounded-[24px] border relative overflow-hidden flex flex-col order-1 lg:order-2 h-[40%] lg:h-full min-h-[300px] backdrop-blur-2xl transition-all duration-300 shadow-2xl"
+                    className="w-full lg:w-[32%] lg:max-w-[32%] flex-shrink-0 rounded-[24px] border relative overflow-hidden flex flex-col order-1 lg:order-2 h-[40%] lg:h-full min-h-[300px] backdrop-blur-2xl transition-all duration-300 shadow-2xl min-w-0"
                     style={{ backgroundColor: t.glassBg, borderColor: t.glassBorder }}
                 >
 
@@ -286,10 +286,10 @@ export default function SocialMentorPage() {
                     </div>
 
                     {showHistory ? (
-                        <div className="flex-1 w-full h-full backdrop-blur-2xl flex flex-col p-4 sm:p-6 overflow-hidden z-10 transition-colors">
-                            <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6 shrink-0 pr-20 sm:pr-32">
-                                <h2 className="text-xl sm:text-2xl font-syne font-black flex items-center gap-2" style={{ color: t.textPrimary }}>
-                                    <History className="w-6 h-6" style={{ color: t.primary }} /> Session History
+                        <div className="flex-1 w-full h-full backdrop-blur-2xl flex flex-col p-4 sm:p-6 overflow-hidden z-10 transition-colors min-h-0">
+                            <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6 shrink-0 pr-20 sm:pr-32 min-w-0">
+                                <h2 className="text-xl sm:text-2xl font-syne font-black flex items-center gap-2 truncate min-w-0" style={{ color: t.textPrimary }}>
+                                    <History className="w-6 h-6 shrink-0" style={{ color: t.primary }} /> <span className="truncate">Session History</span>
                                 </h2>
                                 <button
                                     onClick={fetchHistory}
@@ -338,7 +338,7 @@ export default function SocialMentorPage() {
                                 </button>
                             </div>
 
-                            <div className="space-y-3 overflow-y-auto flex-1 p-1 scrollbar-thin scrollbar-thumb-border">
+                            <div data-lenis-prevent="true" className="space-y-3 overflow-y-auto flex-1 p-1 scrollbar-thin scrollbar-thumb-border min-h-0 relative">
                                 {filteredSessions.length === 0 ? (
                                     <p className="text-sm text-muted-foreground text-center py-10 italic">
                                         {searchQuery ? "No sessions match your search." : (activeTab === "archived" ? "No archived sessions." : "No past sessions found. Start a new chat!")}
@@ -348,13 +348,15 @@ export default function SocialMentorPage() {
                                         <div
                                             key={session.sessionId}
                                             onClick={() => loadSession(session)}
-                                            className="p-4 rounded-2xl border cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.98] group shadow-sm relative flex flex-col"
+                                            className="p-4 rounded-2xl border cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.98] group shadow-sm relative flex flex-col min-w-0"
                                             style={{ backgroundColor: t.cardInnerBg, borderColor: t.cardBorder }}
                                         >
-                                            <div className="flex justify-between items-start mb-2">
-                                                <p className="text-sm font-bold truncate pr-2 flex-1 transition-colors" style={{ color: t.textPrimary }} title={session.title}>
-                                                    {session.title || "Untitled Session"}
-                                                </p>
+                                            <div className="flex justify-between items-start mb-2 min-w-0">
+                                                <div className="min-w-0 flex-1 pr-2">
+                                                    <p className="text-sm font-bold truncate transition-colors" style={{ color: t.textPrimary }} title={session.title}>
+                                                        {session.title || "Untitled Session"}
+                                                    </p>
+                                                </div>
                                                 <div className="flex items-center gap-1.5 shrink-0">
                                                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap" style={{ backgroundColor: t.btnSecondaryBg, color: t.textMuted }}>
                                                         {new Date(session.updatedAt).toLocaleDateString()}
@@ -380,7 +382,7 @@ export default function SocialMentorPage() {
                                                     </DeleteHistoryAlert>
                                                 </div>
                                             </div>
-                                            <p className="text-xs text-muted-foreground truncate mt-1">
+                                            <p className="text-xs text-muted-foreground truncate mt-1 w-full">
                                                 {session.messages && session.messages.length > 1
                                                     ? `"${session.messages[1].text}"`
                                                     : "New Session"}

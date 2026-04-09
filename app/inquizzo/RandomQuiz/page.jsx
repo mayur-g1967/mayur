@@ -1,7 +1,8 @@
 // location : app/inquizzo/RandomQuiz/page.jsx
 'use client'
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import {
   Mic, MicOff, Volume2, CheckCircle, XCircle,
@@ -14,12 +15,14 @@ import NoiseMesh from '@/app/components/inquizzo/NoiseMesh';
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { jsPDF } from "jspdf";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT
    ═══════════════════════════════════════════════════════════════ */
-const Quiz = () => {
+const QuizInner = () => {
+  const searchParams = useSearchParams();
+  const shouldResume = searchParams.get('resume') === 'true' || !!searchParams.get('sessionId');
   // ── State ──────────────────────────────────────────────────
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -70,6 +73,7 @@ const Quiz = () => {
   const voicesRef = useRef([]);
   const transcriptRef = useRef("");
   const isManualStopRef = useRef(false);
+  const needsDbResumeRef = useRef(false); // set in init, consumed by a later effect
 
   // ── Init ───────────────────────────────────────────────────
   useEffect(() => {
@@ -88,7 +92,8 @@ const Quiz = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) setIsBrowserSupported(false);
     setMounted(true);
-    // Auto-restore session if one exists (prompt is shown on dashboard)
+    // Auto-restore session if one exists
+    // Priority 1: localStorage (fast, offline-capable)
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
@@ -98,10 +103,17 @@ const Quiz = () => {
             hasRestoredRef.current = true;
             restoreSession(session);
           }
+          return () => { if (recognitionRef.current) recognitionRef.current.abort(); };
         }
       }
     } catch (e) {
       console.warn('Failed to check saved session:', e);
+    }
+    // Priority 2: If navigated from the dashboard with ?resume or ?sessionId,
+    // flag that we need to load the active session from the DB.
+    // The actual call happens in a later effect once all functions are defined.
+    if (shouldResume && !hasRestoredRef.current) {
+      needsDbResumeRef.current = true;
     }
     return () => { if (recognitionRef.current) recognitionRef.current.abort(); };
   }, []);
@@ -711,7 +723,8 @@ const Quiz = () => {
 
   useEffect(() => {
     // Only fetch initial question if we're not restoring a session
-    if (!isRestoringSessionRef.current) {
+    // and we weren't asked to resume from the dashboard URL param
+    if (!isRestoringSessionRef.current && !shouldResume) {
       const saved = localStorage.getItem(STORAGE_KEY);
       const hasValidSession = (() => {
         try {
@@ -725,6 +738,24 @@ const Quiz = () => {
         getAIQuestion();
       }
     }
+  }, []);
+
+  // ── DB Resume Effect ─────────────────────────────────────────
+  // Runs after all functions are defined — handles the case where the user
+  // clicked "Continue" on the dashboard and there is no localStorage session
+  // (session lives only in the DB via the active-session API).
+  useEffect(() => {
+    if (!needsDbResumeRef.current) return;
+    hasRestoredRef.current = true;
+    isRestoringSessionRef.current = true;
+    loadActiveSession().then((restored) => {
+      isRestoringSessionRef.current = false;
+      if (!restored) {
+        // Nothing in the DB either — start a new quiz
+        sessionIdRef.current = crypto.randomUUID();
+        getAIQuestion();
+      }
+    });
   }, []);
 
   // ── Downloads ──────────────────────────────────────────────
@@ -929,7 +960,7 @@ const Quiz = () => {
 
   return (
     <div
-      className={cn("relative min-h-screen font-dm cursor-none flex flex-col transition-colors duration-500", !isLight && "iq-mesh-bg")}
+      className={cn("relative min-h-screen font-dm flex flex-col transition-colors duration-500", !isLight && "iq-mesh-bg")}
       style={isLight ? { backgroundColor: t.pageBg } : undefined}
     >
       {!isLight && <NoiseMesh />}
@@ -1360,9 +1391,16 @@ const Quiz = () => {
           </motion.div>
         </div>
       )}
-      <Toaster richColors position="top-center" />
+
     </div>
   );
 };
 
+const Quiz = () => (
+  <Suspense fallback={null}>
+    <QuizInner />
+  </Suspense>
+);
+
 export default Quiz;
+

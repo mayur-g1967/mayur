@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import CursorGlow from './effects/CursorGlow';
+// import CursorGlow removed
 import ParallaxBlob from './effects/ParallaxBlob';
 import MagneticButton from './effects/MagneticButton';
 
@@ -38,7 +38,7 @@ const ShowcaseSection = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#03001E] via-[#7303C0]/20 to-[#03001E]">
-      <CursorGlow />
+      {/* Global CustomCursor handles the pointer */}
 
       {/* Parallax blobs */}
       <ParallaxBlob offsetFactor={0.025} className="top-1/4 left-1/4 w-[500px] h-[300px] bg-[#7303C0]/15" />

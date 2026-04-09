@@ -15,7 +15,8 @@ export function Aurora({
     const timeRef = useRef(0);
 
     useEffect(() => {
-        if (!mountRef.current) return;
+        const container = mountRef.current;
+        if (!container) return;
 
         // SCENE SETUP
         const scene = new THREE.Scene();
@@ -23,7 +24,7 @@ export function Aurora({
         // CAMERA SETUP
         const camera = new THREE.PerspectiveCamera(
             75,
-            mountRef.current.clientWidth / mountRef.current.clientHeight,
+            container.clientWidth / container.clientHeight,
             0.1,
             1000
         );
@@ -31,7 +32,7 @@ export function Aurora({
 
         // RENDERER SETUP
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+        renderer.setSize(container.clientWidth, container.clientHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
         mountRef.current.appendChild(renderer.domElement);
 
@@ -158,8 +159,8 @@ export function Aurora({
         const handleResize = () => {
             if (!mountRef.current) return;
 
-            const width = mountRef.current.clientWidth;
-            const height = mountRef.current.clientHeight;
+            const width = container.clientWidth;
+            const height = container.clientHeight;
 
             renderer.setSize(width, height);
             camera.aspect = width / height;
@@ -182,8 +183,8 @@ export function Aurora({
             material.dispose();
             renderer.dispose();
 
-            if (mountRef.current && mountRef.current.contains(renderer.domElement)) {
-                mountRef.current.removeChild(renderer.domElement);
+            if (container && container.contains(renderer.domElement)) {
+                container.removeChild(renderer.domElement);
             }
         };
     }, [colorStops, amplitude, speed, blend]);

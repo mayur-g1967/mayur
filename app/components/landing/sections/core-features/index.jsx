@@ -1,18 +1,20 @@
 import { CORE_FEATURES } from "./data";
 import { motion } from "framer-motion";
+import { PillSubheading } from "../../ui/PillSubheading";
 
 export function CoreFeatures() {
   return (
-    <section className="py-24 bg-background px-5 relative z-10 transition-colors duration-300">
+    <section id="features" className="py-24 bg-background px-5 relative z-10 transition-colors duration-300">
       <div className="max-w-[72rem] mx-auto">
         <div className="mb-16 text-center">
+          <PillSubheading text="Core Features" />
           <h2 className="mb-4 font-serif font-bold text-foreground text-3xl md:text-5xl max-w-xl mx-auto tracking-tight">
             Elevate Your Journey
           </h2>
 
           <p className="max-w-xl mx-auto text-lg text-muted-foreground">
-            Experience weightless progression with tools designed to analyze,
-            track, and connect you with a community of ambitious learners.
+            Master your presence with specialized AI tools for real-time communication coaching,
+            interactive social roleplay, and personalized micro-learning modules.
           </p>
         </div>
 

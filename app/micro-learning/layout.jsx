@@ -3,7 +3,6 @@
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import './micro-learning.css';
-import CustomCursor from './CustomCursor';
 import MicroLearningNoiseMesh from './MicroLearningNoiseMesh';
 import Header from '@/app/components/shared/header/Header';
 
@@ -51,7 +50,6 @@ export default function MicroLearningLayout({ children }) {
             {/* Shared Header — appears on every micro-learning page */}
             <Header showDateFilter={false} />
 
-            <CustomCursor />
             {children}
         </div>
     );

@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import BenefitsGrid from '@/app/components/landing/sections/benefits-grid';
-import TestimonialsSection from '@/app/components/landing/sections/client-testimonial';
 import FaqAccordion from '@/app/components/landing/sections/faq-accordion';
 import HeroSection from '@/app/components/landing/sections/hero-section';
 import ToolsTab from '@/app/components/landing/sections/tools-tab';
 import { CoreFeatures } from '@/app/components/landing/sections/core-features';
+import AboutSection from '@/app/components/landing/sections/about-section';
 
 export default function Home() {
   const router = useRouter();
@@ -43,7 +43,7 @@ export default function Home() {
       <CoreFeatures />
       <ToolsTab />
       <BenefitsGrid />
-      <TestimonialsSection />
+      <AboutSection />
       <FaqAccordion />
     </>
   );

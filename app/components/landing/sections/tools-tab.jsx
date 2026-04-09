@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { PillSubheading } from '../ui/PillSubheading';
 
 // Define the tab type
 export default function AIToolsTabs() {
@@ -22,8 +23,8 @@ export default function AIToolsTabs() {
       id: 'dashboard',
       label: 'Dashboard',
       icon: <LayoutDashboard className="w-8 h-8" />,
-      lightImage: '/images/tab-image/tab-image-1.jpg',
-      darkImage: '/images/tab-image/tab-image-1-dark.jpg',
+      lightImage: '/images/tab-image/dashboard-dark.jpeg',
+      darkImage: '/images/tab-image/dashboard.jpeg',
       title: 'Your Command Center',
       description:
         'View your progress, analytics, and active learning modules in one seamless interface tailored to your PersonaAI journey.',
@@ -32,8 +33,8 @@ export default function AIToolsTabs() {
       id: 'confidence',
       label: 'Confidence Coach',
       icon: <Mic className="w-8 h-8" />,
-      lightImage: '/images/tab-image/tab-image-2.jpg',
-      darkImage: '/images/tab-image/tab-image-2-dark.jpg',
+      lightImage: '/images/tab-image/confidence-coach-dark.png',
+      darkImage: '/images/tab-image/confidence-coach.png',
       title: 'Master Your Delivery',
       description:
         'Practice your communication skills with real-time AI feedback. Analyze your vocal tone, pacing, and visual presence instantly.',
@@ -42,8 +43,8 @@ export default function AIToolsTabs() {
       id: 'mentor',
       label: 'Social Mentor',
       icon: <Users className="w-8 h-8" />,
-      lightImage: '/images/tab-image/tab-image-3.jpg',
-      darkImage: '/images/tab-image/tab-image-3-dark.jpg',
+      lightImage: '/images/tab-image/socialmentor-dark.jpeg',
+      darkImage: '/images/tab-image/socialmentor.jpeg',
       title: 'Navigate Social Dynamics',
       description:
         'Prepare for difficult conversations, interviews, and networking events through personalized AI roleplay scenarios.',
@@ -52,8 +53,8 @@ export default function AIToolsTabs() {
       id: 'micro',
       label: 'Micro-Learning',
       icon: <GraduationCap className="w-8 h-8" />,
-      lightImage: '/images/tab-image/tab-image-4.jpg',
-      darkImage: '/images/tab-image/tab-image-4-dark.jpg',
+      lightImage: '/images/tab-image/microlearning-dark.jpeg',
+      darkImage: '/images/tab-image/microlearning.jpeg',
       title: 'Build Skills Fast',
       description:
         'Engage with bite-sized, personalized lessons designed to fit your busy schedule and accelerate your personal growth.',
@@ -62,8 +63,8 @@ export default function AIToolsTabs() {
       id: 'inquizzo',
       label: 'InQuizzo',
       icon: <Brain className="w-8 h-8" />,
-      lightImage: '/images/tab-image/tab-image-5.jpg',
-      darkImage: '/images/tab-image/tab-image-5-dark.jpg',
+      lightImage: '/images/tab-image/inquizzo-dark.jpeg',
+      darkImage: '/images/tab-image/inquizzo.jpeg',
       title: 'Test Your Knowledge',
       description:
         'Challenge yourself with dynamic, AI-generated quizzes across various domains to ensure maximum retention and mastery.',
@@ -74,13 +75,14 @@ export default function AIToolsTabs() {
   const currentTab = tabs.find((tab) => tab.id === activeTab) || tabs[0];
 
   return (
-    <section className="py-14 md:py-28 dark:bg-dark-primary">
+    <section id="ai-tools" className="py-14 md:py-28 dark:bg-dark-primary">
       <div className="wrapper">
         <div className="max-w-2xl mx-auto mb-12 text-center">
-          <h2 className="mb-3 font-bold text-center text-gray-800 dark:text-white/90 text-3xl md:text-title-lg">
+          <PillSubheading text="AI Toolkit" />
+          <h2 className="mb-3 font-bold text-center text-foreground text-3xl md:text-title-lg">
             All the AI tools you need, at your Fingertips.
           </h2>
-          <p className="max-w-2xl mx-auto leading-6 text-gray-500 dark:text-gray-400">
+          <p className="max-w-2xl mx-auto leading-6 text-muted-foreground">
             Unlock the Potential of Innovation, Discover the Advanced AI Tools
             Transforming Your Ideas into Reality with Unmatched Precision and
             Intelligence.
@@ -91,14 +93,14 @@ export default function AIToolsTabs() {
           <div>
             {/* Tab Navigation */}
             <div className="overflow-x-auto custom-scrollbar mx-auto max-w-fit relative">
-              <div className="flex gap-2 min-w-max rounded-full bg-gray-100 dark:bg-white/5 p-1">
+              <div className="flex gap-2 min-w-max rounded-full bg-muted p-1">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center h-12 gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 rounded-full ${activeTab === tab.id
-                      ? 'bg-white dark:text-white/90 dark:bg-white/10 text-gray-800'
-                      : 'text-gray-500 dark:text-gray-400 bg-transparent'
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground bg-transparent'
                       }`}
                   >
                     {tab.icon}
@@ -146,13 +148,13 @@ export default function AIToolsTabs() {
 
             {/* Bottom Section */}
             <div className="mt-6 text-center">
-              <h2 className="mb-2 text-xl font-bold text-gray-800 dark:text-white/90">
+              <h2 className="mb-2 text-xl font-bold text-foreground">
                 {currentTab.title}
               </h2>
-              <p className="max-w-xl mx-auto mb-6 text-sm text-gray-500 dark:text-gray-400">
+              <p className="max-w-xl mx-auto mb-6 text-sm text-muted-foreground">
                 {currentTab.description}
               </p>
-              <button className="px-6 py-3 text-sm font-medium text-white transition-colors rounded-full bg-primary-500 hover:bg-primary-600">
+              <button className="px-6 py-3 text-sm font-medium text-white transition-colors rounded-full bg-primary hover:opacity-90">
                 Try it now for free
               </button>
             </div>

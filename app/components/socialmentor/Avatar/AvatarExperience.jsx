@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, OrbitControls, useAnimations, Html, useGLTF } from "@react-three/drei";
+import { Environment, OrbitControls, useAnimations, Html, useGLTF, useFBX } from "@react-three/drei";
 import { Suspense, Component, useEffect, useRef, useState, useMemo } from "react";
 import { Loader2 } from "lucide-react";
 import * as THREE from "three";
@@ -92,6 +92,7 @@ function MaleAvatar({ isTalking }) {
         if (!action) return;
         action.reset();
         if (isTalking) {
+            action.paused = false;
             action.play();
         } else {
             action.play();
@@ -116,7 +117,6 @@ function FemaleAvatar({ isTalking }) {
     const mixer = useRef();
     const actions = useRef({});
     const currentAction = useRef();
-    const [isFullyLoaded, setIsFullyLoaded] = useState(false);
 
     // Keep the GLTF model
     const { scene } = useGLTF("/female-avatar/source/664cbf464c3b647e2d6af7b4.glb");
@@ -131,8 +131,7 @@ function FemaleAvatar({ isTalking }) {
         });
     }, [scene]);
 
-    // FBX Animations from the new public/animations/female/fbx folder
-    const animationPaths = useMemo(() => [
+    const animationPaths = [
         "/animations/female/fbx/blender Talking (4).fbx",
         "/animations/female/fbx/blender Talking (5).fbx",
         "/animations/female/fbx/blender Talking (6).fbx",
@@ -141,7 +140,9 @@ function FemaleAvatar({ isTalking }) {
         "/animations/female/fbx/blender idle(1).fbx",
         "/animations/female/fbx/blender Standing Arguing (1).fbx",
         "/animations/female/fbx/blender Waving (1).fbx"
-    ], []);
+    ];
+
+    const fbxs = useFBX(animationPaths);
 
     // Helper: Normalize bone names for aggressive matching
     const normalize = (name) => name.toLowerCase().replace(/mixamorig|armature|scene|skeleton|[:|._-]/g, "");
@@ -149,9 +150,8 @@ function FemaleAvatar({ isTalking }) {
     /* ----------- Setup mixer & retarget one-time ----------- */
 
     useEffect(() => {
-        if (!scene) return;
+        if (!scene || !fbxs) return;
 
-        const fbxLoader = new FBXLoader();
         mixer.current = new THREE.AnimationMixer(scene);
 
         // Map GLTF bones
@@ -164,52 +164,45 @@ function FemaleAvatar({ isTalking }) {
         });
 
         const newActions = {};
-        let loadedCount = 0;
 
-        animationPaths.forEach((path) => {
-            fbxLoader.load(path, (fbx) => {
-                if (fbx.animations && fbx.animations.length > 0) {
-                    const clip = fbx.animations[0].clone();
+        fbxs.forEach((fbx, index) => {
+            if (fbx.animations && fbx.animations.length > 0) {
+                const clip = fbx.animations[0].clone();
 
-                    // Retarget FBX tracks to GLTF bones
-                    clip.tracks.forEach((track) => {
-                        const [bonePart, property] = track.name.split(".");
-                        const clean = normalize(bonePart);
-                        if (boneMap[clean]) {
-                            track.name = boneMap[clean] + "." + property;
-                        }
-                    });
-
-                    const fileName = path.split("/").pop();
-                    const action = mixer.current.clipAction(clip);
-                    newActions[fileName] = action;
-                }
-
-                loadedCount++;
-                if (loadedCount === animationPaths.length) {
-                    actions.current = newActions;
-                    setIsFullyLoaded(true);
-
-                    // Start Initial Animation
-                    const idleAction = newActions["blender idle(1).fbx"];
-                    if (idleAction) {
-                        idleAction.play();
-                        currentAction.current = idleAction;
+                // Retarget FBX tracks to GLTF bones
+                clip.tracks.forEach((track) => {
+                    const [bonePart, property] = track.name.split(".");
+                    const clean = normalize(bonePart);
+                    if (boneMap[clean]) {
+                        track.name = boneMap[clean] + "." + property;
                     }
-                }
-            });
+                });
+
+                const fileName = animationPaths[index].split("/").pop();
+                const action = mixer.current.clipAction(clip);
+                newActions[fileName] = action;
+            }
         });
+
+        actions.current = newActions;
+
+        // Start Initial Animation
+        const idleAction = newActions["blender idle(1).fbx"];
+        if (idleAction) {
+            idleAction.play();
+            currentAction.current = idleAction;
+        }
 
         return () => {
             if (mixer.current) mixer.current.stopAllAction();
         };
-    }, [scene, animationPaths]);
+    }, [scene, fbxs]);
 
 
     /* ----------- Controlled Switch ----------- */
 
     useEffect(() => {
-        if (!isFullyLoaded || !actions.current) return;
+        if (!actions.current) return;
         const acts = actions.current;
 
         let target;
@@ -228,7 +221,7 @@ function FemaleAvatar({ isTalking }) {
         target.reset().fadeIn(0.3).play();
         currentAction.current = target;
 
-    }, [isTalking, isFullyLoaded]);
+    }, [isTalking]);
 
 
     /* ----------- Engine ----------- */

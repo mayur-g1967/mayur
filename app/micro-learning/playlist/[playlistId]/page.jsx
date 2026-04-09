@@ -67,7 +67,7 @@ export default function PlaylistVideos({ params }) {
       <div style={styles.videoGrid} className="ml-playlist-video-grid">
         {videos.map((video, index) => (
           <a
-            key={`${video.id}-${index}`}
+            key={video.id}
             href={`/micro-learning/video/${video.id}?list=${playlistId}`}
             style={styles.cardLink}
           >

@@ -42,6 +42,17 @@ export async function POST(req) {
                     Focus on substance and presence.
 
                     You MUST generate exactly 3 specific "Areas for Improvement". Be critical but constructive.
+                    For each area, suggest a relevant training category from this list: 
+                    - communication
+                    - posture
+                    - confidence
+                    - charisma
+                    - emotional-intelligence
+                    - motivation
+                    - resilience
+                    - self-discipline
+                    - leadership
+
                     Return your response in strict JSON format. 
                     The output must be a JSON object with a "feedback" key containing an array of exactly 3 objects:
                     {
@@ -49,7 +60,9 @@ export async function POST(req) {
                         {
                           "title": "SHORT TITLE IN ALL CAPS",
                           "description": "Concise, actionable advice.",
-                          "iconType": "one of: camera, mic, zap, activity, eye, trending"
+                          "iconType": "one of: camera, mic, zap, activity, eye, trending",
+                          "category": "matching category from the list above",
+                          "searchQuery": "2-3 word search query to find a relevant training video (e.g., 'improve posture hacks', 'eye contact tips')"
                         }
                       ]
                     }

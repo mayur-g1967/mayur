@@ -6,6 +6,7 @@ import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { LoginButton } from './ui/MagneticButtons';
 import { ToolsMenu } from './ui/ToolsMenu';
+import { MobileMenu } from './ui/MobileMenu';
 import Image from 'next/image';
 import { Assets } from '@/assets/assets';
 
@@ -20,6 +21,14 @@ export default function LandingHeader() {
 
     const isLight = mounted && resolvedTheme === 'light';
     const isDarkMode = mounted && resolvedTheme === 'dark';
+
+    const handleScrollToSection = (e, id) => {
+        e.preventDefault();
+        const section = document.getElementById(id);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
     return (
         <div className="fixed top-0 z-50 w-full">
@@ -45,17 +54,33 @@ export default function LandingHeader() {
 
                     {/* Center: Navigation */}
                     <nav className='hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2'>
-                        <Link href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Features</Link>
+                        <a
+                            href="#"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                        >
+                            Home
+                        </a>
                         <ToolsMenu />
-                        <Link href="#about" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">About</Link>
+                        <a
+                            href="#about"
+                            onClick={(e) => handleScrollToSection(e, 'about')}
+                            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                        >
+                            About
+                        </a>
                     </nav>
 
                     {/* Right: Theme + Login */}
                     <div className='flex items-center gap-4 shrink-0'>
                         <Theme />
-                        <Link href="/login">
+                        <Link href="/login" className="hidden sm:block">
                             <LoginButton />
                         </Link>
+                        <MobileMenu />
                     </div>
                 </div>
             </header>

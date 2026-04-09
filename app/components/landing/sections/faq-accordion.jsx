@@ -45,13 +45,13 @@ export default function FaqAccordion() {
   };
 
   return (
-    <section id="faq" className="py-14 md:py-28 dark:bg-[#171f2e]">
+    <section id="faq" className="py-14 md:py-28 bg-background">
       <div className="wrapper">
         <div className="max-w-2xl mx-auto mb-12 text-center">
-          <h2 className="mb-3 font-bold text-center text-gray-800 text-3xl dark:text-white/90 md:text-title-lg">
+          <h2 className="mb-3 font-bold text-center text-foreground text-3xl md:text-title-lg">
             Frequently Asked Questions
           </h2>
-          <p className="max-w-md mx-auto leading-6 text-gray-500 dark:text-gray-400">
+          <p className="max-w-md mx-auto leading-6 text-muted-foreground">
             Answered all frequently asked questions, Still confused? feel free
             contact with us
           </p>
@@ -80,23 +80,23 @@ function FAQItem({
   onToggle,
 }) {
   return (
-    <div className="pb-5 border-b border-gray-200 dark:border-gray-800">
+    <div className="pb-5 border-b border-border">
       <button
         type="button"
         className="flex items-center justify-between w-full text-left"
         onClick={onToggle}
         aria-expanded={isActive}
       >
-        <span className="text-lg font-medium text-gray-800 dark:text-white/90">
+        <span className="text-lg font-medium text-foreground">
           {item.question}
         </span>
-        <span className="flex-shrink-0 ml-6">
+        <span className="flex-shrink-0 ml-6 text-primary">
           {isActive ? <MinusIcon /> : <PlusIcon />}
         </span>
       </button>
       {isActive && (
         <div className="mt-5">
-          <p className="text-base leading-7 text-gray-500 dark:text-gray-400">
+          <p className="text-base leading-7 text-muted-foreground">
             {item.answer}
           </p>
         </div>

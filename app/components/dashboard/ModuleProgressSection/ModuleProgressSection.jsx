@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes'
 import { ProgressStatusFilter, CategoryFilter, SortSelect } from './ModuleProgressFilters.jsx'
 import ModuleProgressList from './ModuleProgressList.jsx'
 import { modulesData } from './ModulesData.js'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { LayoutList, Play, ChevronRight, Zap } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
@@ -23,6 +23,38 @@ export default function ModuleProgressSection({ liveData = null, liveLoading = t
 
   const { resolvedTheme } = useTheme();
   const isLight = resolvedTheme === 'light';
+  const [localActive, setLocalActive] = useState(null);
+
+  // Direct localStorage check for max reliability
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const check = () => {
+      try {
+        const saved = localStorage.getItem('inquizzo_active_session');
+        if (saved) {
+          const s = JSON.parse(saved);
+          const progress = s.current_index || s.questions_answered || 0;
+          if (s && progress > 0 && progress < 10) {
+            setLocalActive({
+              sessionId: s.session_id || 'local',
+              title: s.quiz_id === 'random' ? 'Random Quiz' : (s.topic || 'Subject Quiz'),
+              progress: progress,
+              moduleId: 'inquizzo'
+            });
+            return;
+          }
+        }
+      } catch (e) { }
+      setLocalActive(null);
+    };
+    check();
+    window.addEventListener('storage', check);
+    window.addEventListener('focus', check);
+    return () => {
+      window.removeEventListener('storage', check);
+      window.removeEventListener('focus', check);
+    };
+  }, []);
 
   const t = isLight ? {
     cardBg: 'var(--card)',
@@ -46,44 +78,52 @@ export default function ModuleProgressSection({ liveData = null, liveLoading = t
       const virtualSubmodules = [];
 
       // Inject InQuizzo live progress bars
-      if (module.id === 'inquizzo') {
-        const baseSubmodules = module.submodules.map((sub) => {
-          if (sub.id === 'accuracy') return { ...sub, progress: liveData.moduleProgress?.accuracyProgress ?? 0 };
-          if (sub.id === 'questions') return { ...sub, progress: liveData.moduleProgress?.questionsProgress ?? 0 };
-          if (sub.id === 'sessions') return { ...sub, progress: liveData.moduleProgress?.sessionsProgress ?? 0 };
+      if (module.id.toLowerCase() === 'inquizzo') {
+        const baseSubmodules = (module.submodules || []).map((sub) => {
+          if (sub.id === 'accuracy') {
+            return {
+              ...sub,
+              progress: liveData.moduleProgress?.accuracyProgress ?? 0,
+              displayLabel: liveData.moduleProgress?.accuracyLabel
+            };
+          }
+          if (sub.id === 'questions') {
+            return {
+              ...sub,
+              progress: liveData.moduleProgress?.questionsProgress ?? 0,
+              displayLabel: liveData.moduleProgress?.questionsLabel
+            };
+          }
+          if (sub.id === 'score') {
+            return {
+              ...sub,
+              progress: liveData.moduleProgress?.scoreProgress ?? 0,
+              displayLabel: liveData.moduleProgress?.scoreLabel
+            };
+          }
           return sub;
         });
 
-        // Add InQuizzo "Continue" row
-        const activeForInquizzo = liveData.activeSession?.moduleId == null || liveData.activeSession?.moduleId === 'inQuizzo'
-          ? liveData.activeSession
-          : null;
-        if (activeForInquizzo) {
+        // Add InQuizzo "Continue" row (Prefer localActive, fallback to API)
+        const activeSess = localActive || (
+          liveData?.activeSession?.moduleId?.toLowerCase() === 'inquizzo' || !liveData?.activeSession?.moduleId
+            ? liveData?.activeSession
+            : null
+        );
+        if (activeSess) {
           virtualSubmodules.push({
             id: 'active-session',
-            name: activeForInquizzo.title,
-            progress: Math.round((activeForInquizzo.progress / 10) * 100),
-            displayLabel: `${activeForInquizzo.progress}/10 Questions`,
+            name: activeSess.title || (activeSess.sessionId === 'local' ? 'Active Quiz' : 'Continue Quiz'),
+            progress: Math.round(((activeSess.progress || 0) / 10) * 100),
+            displayLabel: `${activeSess.progress || 0}/10 Questions`,
             isVirtual: true,
             type: 'continue',
-            sessionId: activeForInquizzo.sessionId,
-            moduleId: activeForInquizzo.moduleId || 'inQuizzo',
+            sessionId: activeSess.sessionId || 'active',
+            moduleId: 'inquizzo',
           });
         }
 
-        // Add InQuizzo "Review" row
-        if (liveData.lastCompletedSession && liveData.lastCompletedSession.moduleId !== 'microLearning') {
-          virtualSubmodules.push({
-            id: 'last-completed',
-            name: liveData.lastCompletedSession.title,
-            progress: 100,
-            displayLabel: '10/10 Questions',
-            isVirtual: true,
-            type: 'review',
-            sessionId: liveData.lastCompletedSession.sessionId,
-            moduleId: liveData.lastCompletedSession.moduleId || 'inQuizzo',
-          });
-        }
+        // Removed InQuizzo "Review" row as requested
 
         return { ...module, submodules: [...virtualSubmodules, ...baseSubmodules] };
       }
@@ -129,15 +169,30 @@ export default function ModuleProgressSection({ liveData = null, liveLoading = t
         return { ...module, submodules: virtualSubmodules };
       }
 
+      // Inject Social Mentor live progress
+      if (module.id === 'socialmentor') {
+        const smSubmodules = (module.submodules || []).map((sub) => {
+          if (sub.id === 'sessions') {
+            return {
+              ...sub,
+              progress: liveData.moduleProgress?.socialMentorSessionsProgress ?? 0,
+              displayLabel: liveData.moduleProgress?.socialMentorSessionsLabel || '0 Sessions'
+            };
+          }
+          return sub;
+        });
+        return { ...module, submodules: smSubmodules };
+      }
+
       return module;
     });
-  }, [liveData]);
+  }, [liveData, localActive]);
 
   return (
     <motion.div
       whileHover={{ y: -2 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="col-span-full lg:col-span-3 h-[500px] backdrop-blur-[12px] border rounded-2xl p-5 shadow-xl w-full flex flex-col"
+      className="col-span-full lg:col-span-3 h-125 backdrop-blur-md border rounded-2xl p-5 shadow-xl w-full flex flex-col"
       style={{
         backgroundColor: t.cardBg,
         borderColor: t.cardBorder,
@@ -194,13 +249,14 @@ export default function ModuleProgressSection({ liveData = null, liveLoading = t
 
 
 
+        {/* Content Area */}
         <div className='flex-1 overflow-y-auto custom-scroll pr-2 min-h-0'>
-          {liveLoading ? (
+          {liveLoading && !localActive ? (
             <div className="flex flex-col gap-3">
-              {Array(5).fill(0).map((_, i) => (
+              {Array(3).fill(0).map((_, i) => (
                 <div
                   key={i}
-                  className="h-[68px] rounded-lg animate-pulse"
+                  className="h-17 rounded-lg animate-pulse"
                   style={{ backgroundColor: t.primary + '10' }}
                 />
               ))}

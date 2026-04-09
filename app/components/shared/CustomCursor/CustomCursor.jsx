@@ -20,8 +20,7 @@ const CustomCursor = () => {
         setMounted(true);
         const checkRoute = () => {
             const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
-            const isModuleRoute = pathname?.startsWith("/micro-learning");
-            setIsHiddenRoute(isMobile || isModuleRoute);
+            setIsHiddenRoute(isMobile);
         };
         checkRoute();
 
@@ -81,11 +80,25 @@ const CustomCursor = () => {
             setIsVisible(false);
         };
 
+        const handleScroll = () => {
+            if (Date.now() - lastTouchTime.current < 2000) return;
+            // During scroll, re-check what's under the cursor
+            const x = mouseX.get();
+            const y = mouseY.get();
+            const target = document.elementFromPoint(x, y);
+            if (target) {
+                const isPointer = target.closest("button, a") ||
+                    window.getComputedStyle(target).cursor === "pointer";
+                setIsHovered(!!isPointer);
+            }
+        };
+
         window.addEventListener("mousemove", moveMouse);
         window.addEventListener("mouseover", handleHover);
         window.addEventListener("mousedown", handleMouseDown);
         window.addEventListener("mouseup", handleMouseUp);
         window.addEventListener("touchstart", handleTouch, { passive: true });
+        window.addEventListener("scroll", handleScroll, { passive: true, capture: true });
         document.addEventListener("mouseleave", handleMouseLeave);
         document.addEventListener("mouseenter", handleMouseEnter);
 
@@ -95,6 +108,7 @@ const CustomCursor = () => {
             window.removeEventListener("mousedown", handleMouseDown);
             window.removeEventListener("mouseup", handleMouseUp);
             window.removeEventListener("touchstart", handleTouch);
+            window.removeEventListener("scroll", handleScroll, { capture: true });
             document.removeEventListener("mouseleave", handleMouseLeave);
             document.removeEventListener("mouseenter", handleMouseEnter);
         };

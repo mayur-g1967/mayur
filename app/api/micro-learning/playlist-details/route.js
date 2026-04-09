@@ -27,7 +27,7 @@ export async function GET(request) {
       return NextResponse.json({ videos: [], channelLogos: {} });
     }
 
-    const videoIds = [...new Set(items.map(item => item.contentDetails.videoId))].join(',');
+    const videoIds = items.map(item => item.contentDetails.videoId).join(',');
 
     // 2. Fetch extra video details (duration, views)
     const videosRes = await fetch(

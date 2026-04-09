@@ -79,10 +79,10 @@ export default function SignUpPage() {
         </div>
       )}
 
-      <div className="w-full max-w-250 flex rounded-2xl shadow-2xl overflow-hidden bg-card/60 backdrop-blur-xl border border-white/10 z-10 transition-all duration-300">
+      <div className="w-full max-w-[1000px] flex rounded-2xl shadow-2xl overflow-hidden bg-card/60 backdrop-blur-xl border border-white/10 z-10 transition-all duration-300">
         {/* Left Side - Log In Prompt */}
         <div className="hidden lg:flex lg:flex-1 flex-col items-center justify-center gradient-persona-primary p-12 text-center text-white relative overflow-hidden auth-form-slide-left">
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-size-[24px_24px]"></div>
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_white_1px,_transparent_1px)] bg-[length:24px_24px]"></div>
 
           <div className="relative z-10 max-w-xs">
             <h2 className="font-bold text-4xl mb-6">PersonaAI</h2>
@@ -90,7 +90,7 @@ export default function SignUpPage() {
               Join thousands of users building their confidence and mastering social growth.
             </p>
 
-            <div className="space-y-4 mb-10 text-left mx-auto max-w-55">
+            <div className="space-y-4 mb-10 text-left mx-auto max-w-[220px]">
               {[
                 "Personalized Roadmap",
                 "Expert AI Guidance",
@@ -117,7 +117,7 @@ export default function SignUpPage() {
 
         {/* Right Side - Sign Up Form */}
         <div className="flex-[1.2] flex flex-col items-center justify-center px-8 py-12 sm:px-16 auth-form-slide-right relative overflow-hidden">
-          <div className="w-full max-w-95 space-y-8">
+          <div className="w-full max-w-[380px] space-y-8">
             {/* Header */}
             <div className="text-center">
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-primary/20 shadow-inner">

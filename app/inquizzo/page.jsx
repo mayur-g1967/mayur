@@ -353,7 +353,7 @@ export default function InQuizzoDashboard() {
   });
 
   return (
-    <div className={cn("relative min-h-screen font-dm cursor-none flex flex-col transition-colors duration-500", !isLight && "iq-mesh-bg")} style={isLight ? { backgroundColor: t.pageBg } : undefined}>
+    <div className={cn("relative min-h-screen font-dm flex flex-col transition-colors duration-500", !isLight && "iq-mesh-bg")} style={isLight ? { backgroundColor: t.pageBg } : undefined}>
       <NoiseMesh />
 
       {/* Ambient background orbs */}

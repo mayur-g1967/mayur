@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import CursorGlow from './effects/CursorGlow';
-import CursorTrail from './effects/CursorTrail';
+// import CursorGlow from './effects/CursorGlow';
+// import CursorTrail from './effects/CursorTrail';
 import ParallaxBlob from './effects/ParallaxBlob';
 import MagneticButton from './effects/MagneticButton';
 
@@ -131,9 +131,7 @@ const Hero = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center text-white text-center px-4 overflow-hidden bg-gradient-to-br from-[#03001E] via-[#7303C0]/20 to-[#03001E]">
 
-      {/* Effect layers */}
-      <CursorTrail />
-      <CursorGlow />
+      {/* Global CustomCursor handles the pointer */}
 
       {/* Parallax blobs */}
       <ParallaxBlob offsetFactor={0.025} className="top-0 left-1/3 w-[500px] h-[300px] bg-[#7303C0]/15" />

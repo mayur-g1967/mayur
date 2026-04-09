@@ -5,7 +5,12 @@ import { useEffect, useState } from 'react';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useTheme } from 'next-themes';
 
-export default function Header({ DateValue, onDateChange, tempDate, showDateFilter = true }) {
+export default function Header({
+    DateValue,
+    onDateChange,
+    tempDate,
+    showDateFilter = true // This acts as the toggle between Version 1 and Version 2
+}) {
     const [userName, setUserName] = useState('User');
     const { resolvedTheme } = useTheme();
     const isLight = resolvedTheme === 'light';
@@ -15,7 +20,8 @@ export default function Header({ DateValue, onDateChange, tempDate, showDateFilt
         if (storedUser) {
             try {
                 const userData = JSON.parse(storedUser);
-                setUserName(userData.name.split(' ')[0] || userData.firstName || 'User');
+                // Priority: First Name from split > firstName property > default
+                setUserName(userData.name?.split(' ')[0] || userData.firstName || 'User');
             } catch (error) {
                 console.error('Error parsing user data:', error);
             }
@@ -30,28 +36,31 @@ export default function Header({ DateValue, onDateChange, tempDate, showDateFilt
                     borderBottom: isLight ? '1px solid rgba(0, 0, 0, 0.05)' : '1px solid rgba(255, 255, 255, 0.06)',
                 }}
             >
-
-                {/* Main row: hamburger | welcome | [date desktop] | buttons */}
+                {/* Main Row */}
                 <div className="h-16 flex flex-row items-center justify-between gap-2">
-                    {/* Left: hamburger (mobile) + welcome text */}
+
+                    {/* Left: Hamburger & Welcome Text */}
                     <div className="flex items-center gap-2 min-w-0 flex-1">
                         <SidebarTrigger className="md:hidden shrink-0" />
                         <div className="text-left min-w-0">
                             <p className='text-base md:text-xl font-bold truncate'>
                                 Welcome <span className='text-primary'>{userName}</span>
                             </p>
-                            <span className='text-sm truncate block'>
-                                Start your <span className='font-medium'>Persona</span><span className='text-primary font-bold'>AI</span> Journey
+                            <span className='text-sm truncate block text-muted-foreground'>
+                                Start your <span className='font-medium text-foreground'>Persona</span>
+                                <span className='text-primary font-bold'>AI</span> Journey
                             </span>
                         </div>
                     </div>
 
-                    {/* Center: date label (desktop only) */}
-                    <div className="hidden md:block shrink-0">
-                        <p className='text-sm font-bold'>Date Set : {tempDate}</p>
-                    </div>
+                    {/* Center: Date Label (Desktop Only - Version 1 Feature) */}
+                    {showDateFilter && tempDate && (
+                        <div className="hidden md:block shrink-0">
+                            <p className='text-sm font-bold opacity-80'>Date Set: {tempDate}</p>
+                        </div>
+                    )}
 
-                    {/* Right: DateFilter (sm+) + Notifications + Theme */}
+                    {/* Right: Actions (DateFilter + Notifications + Theme) */}
                     <div className='h-full flex items-center gap-2 shrink-0'>
                         {showDateFilter && (
                             <div className="hidden sm:block">
@@ -63,16 +72,15 @@ export default function Header({ DateValue, onDateChange, tempDate, showDateFilt
                     </div>
                 </div>
 
-                {/* Second row — mobile only: DateFilter aligned with welcome text */}
+                {/* Mobile Second Row (Version 1 Feature) */}
                 {showDateFilter && (
                     <div className="sm:hidden pb-3 flex items-center">
-                        {/* Spacer matches SidebarTrigger width (h-7 w-7 button = ~28px) + gap-2 (8px) */}
+                        {/* Aligning the filter with the welcome text by skipping the sidebar trigger width */}
                         <div className="w-[calc(1.75rem+0.5rem)] shrink-0" />
                         <DateFilter value={DateValue} onValueChange={onDateChange} />
                     </div>
                 )}
-
             </header>
         </div>
-    )
+    );
 }

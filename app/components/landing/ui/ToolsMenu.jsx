@@ -64,7 +64,13 @@ export function ToolsMenu() {
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={() => setIsOpen(false)}
         >
-            <button className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">
+            <button
+                onClick={() => {
+                    const section = document.getElementById('ai-tools');
+                    if (section) section.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+            >
                 Tools
                 <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
@@ -127,7 +133,14 @@ export function ToolsMenu() {
                                             Explore our full ecosystem
                                         </span>
                                     </div>
-                                    <button className="text-[10px] uppercase tracking-wider font-bold text-primary hover:underline underline-offset-4">
+                                    <button
+                                        onClick={() => {
+                                            setIsOpen(false);
+                                            const section = document.getElementById('features');
+                                            if (section) section.scrollIntoView({ behavior: 'smooth' });
+                                        }}
+                                        className="text-[10px] uppercase tracking-wider font-bold text-primary hover:underline underline-offset-4"
+                                    >
                                         View All Features
                                     </button>
                                 </div>

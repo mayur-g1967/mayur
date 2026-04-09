@@ -25,7 +25,7 @@ export default function HeroSection() {
       {/* FLOATING LINES – FULL BLEED BACKGROUND */}
       <div className="absolute inset-0 z-[5] pointer-events-auto">
         <FloatingLines
-          linesGradient={isLight ? ["#8b5cf6", "#a78bfa", "#7c3aed"] : ["#9067c6", "#df58cd", "#8d86c9", "#a89acd"]}
+          linesGradient={["#9067c6", "#8d86c9", "#242038"]}
           animationSpeed={isLight ? 1 : 1.1}
           interactive={true}
           bendRadius={isLight ? 5 : 7}
@@ -51,7 +51,7 @@ export default function HeroSection() {
               {/* BRAND NAME LOGO */}
               <motion-div initial={{ opacity: 0, scale: 0.95, y: -10 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}>
                 <div className="flex justify-center items-center mb-6">
-                  <p className='text-6xl sm:text-8xl font-bold font-serif tracking-tight text-primary'>
+                  <p className='text-5xl sm:text-7xl md:text-8xl font-bold font-serif tracking-tight text-primary'>
                     <span className='text-foreground'>Persona</span>AI
                   </p>
                 </div>

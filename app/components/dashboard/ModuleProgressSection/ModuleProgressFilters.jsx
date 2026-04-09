@@ -52,14 +52,6 @@ export function ProgressStatusFilter({ value, onValueChange }) {
         <Loader />
         In Progress
       </ToggleGroupItem>
-      <ToggleGroupItem
-        value="pending"
-        aria-label="Toggle Pending"
-        className="hover:text-foreground hover:bg-primary/10 transition-colors data-[state=on]:bg-yellow-500/20 data-[state=on]:text-white [&[data-state=on]>svg]:fill-yellow-400 [&[data-state=on]>svg]:stroke-white data-[state=on]:border-yellow-800"
-      >
-        <Clock />
-        Pending
-      </ToggleGroupItem>
     </ToggleGroup>
   )
 }

@@ -102,7 +102,7 @@ const ResetPasswordForm = () => {
         </div>
       )}
 
-      <div className="w-full max-w-255 flex rounded-2xl shadow-2xl overflow-hidden bg-card/60 backdrop-blur-xl border border-white/10 z-10 transition-all duration-300">
+      <div className="w-full max-w-[900px] flex rounded-2xl shadow-2xl overflow-hidden bg-card/60 backdrop-blur-xl border border-white/10 z-10 transition-all duration-300">
 
         {/* Left Side - Form Input */}
         <div className="flex-1 flex flex-col justify-center bg-card px-8 py-12 sm:px-16 auth-form-slide-left relative">
@@ -115,7 +115,7 @@ const ResetPasswordForm = () => {
             Back
           </Link>
 
-          <div className="w-full max-w-90 mx-auto space-y-6 mt-8">
+          <div className="w-full max-w-[360px] mx-auto space-y-6 mt-8">
 
             <div className="text-center mb-8">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">

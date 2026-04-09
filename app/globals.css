@@ -570,6 +570,10 @@ body[data-scroll-locked] {
    ======================================== */
 
 @layer utilities {
+  /* Common Layout Utilities */
+  .wrapper {
+    @apply w-full px-5 md:px-8 md:max-w-7xl mx-auto;
+  }
 
   /* PersonaAI Color Classes */
   .bg-persona-dark {
